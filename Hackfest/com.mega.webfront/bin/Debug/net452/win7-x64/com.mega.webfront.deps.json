@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETFramework,Version=v4.5.2/win7-x64",
-    "signature": "87121e966788514be6bae23c46405042eb6b5857"
+    "signature": "e10ba369ebb4f0fc4ae8b5899752578655f6bf97"
   },
   "compilationOptions": {
     "defines": [
@@ -24,7 +24,11 @@
       "com.mega.webfront/1.0.0": {
         "dependencies": {
           "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
-          "Microsoft.AspNetCore": "1.1.2"
+          "Microsoft.AspNetCore": "1.1.2",
+          "Microsoft.ServiceFabric": "5.6.210",
+          "Microsoft.ServiceFabric.AspNetCore.WebListener": "2.6.210",
+          "Microsoft.ServiceFabric.Data": "2.6.210",
+          "Microsoft.ServiceFabric.Services": "2.6.210"
         },
         "compile": {
           "com.mega.webfront.exe": {}
@@ -599,6 +603,16 @@
           "lib/net451/Microsoft.AspNetCore.Server.Kestrel.dll": {}
         }
       },
+      "microsoft.aspnetcore.server.weblistener/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting": "1.1.2",
+          "Microsoft.Net.Http.Headers": "1.1.2",
+          "Microsoft.Net.Http.Server": "1.0.0"
+        },
+        "compile": {
+          "lib/net451/Microsoft.AspNetCore.Server.WebListener.dll": {}
+        }
+      },
       "microsoft.aspnetcore.webutilities/1.1.2": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "1.1.1",
@@ -816,7 +830,61 @@
           "lib/netstandard1.1/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "microsoft.net.http.server/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Primitives": "1.1.1"
+        },
+        "compile": {
+          "lib/net451/Microsoft.Net.Http.Server.dll": {}
+        }
+      },
       "microsoft.netcore.platforms/1.1.0": {},
+      "microsoft.servicefabric/5.6.210": {
+        "compile": {
+          "lib/net45/Microsoft.ServiceFabric.Internal.Strings.dll": {},
+          "lib/net45/Microsoft.ServiceFabric.Internal.dll": {},
+          "lib/net45/System.Fabric.Management.ServiceModel.XmlSerializers.dll": {},
+          "lib/net45/System.Fabric.Management.ServiceModel.dll": {},
+          "lib/net45/System.Fabric.Strings.dll": {},
+          "lib/net45/System.Fabric.dll": {}
+        }
+      },
+      "microsoft.servicefabric.aspnetcore.weblistener/2.6.210": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting": "1.1.2",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Http.Features": "1.1.2",
+          "Microsoft.AspNetCore.Server.WebListener": "1.0.0",
+          "Microsoft.Extensions.DependencyInjection": "1.1.1",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.1",
+          "Microsoft.ServiceFabric.Services": "2.6.210"
+        },
+        "compile": {
+          "lib/net452/Microsoft.ServiceFabric.AspNetCore.WebListener.dll": {},
+          "lib/net452/Microsoft.ServiceFabric.AspNetCore.dll": {}
+        }
+      },
+      "microsoft.servicefabric.data/2.6.210": {
+        "dependencies": {
+          "Microsoft.ServiceFabric": "5.6.210"
+        },
+        "compile": {
+          "lib/net45/Microsoft.ServiceFabric.Data.Interfaces.dll": {},
+          "lib/net45/Microsoft.ServiceFabric.Data.dll": {}
+        }
+      },
+      "microsoft.servicefabric.services/2.6.210": {
+        "dependencies": {
+          "Microsoft.ServiceFabric": "5.6.210",
+          "Microsoft.ServiceFabric.Data": "2.6.210"
+        },
+        "compile": {
+          "lib/net45/Microsoft.ServiceFabric.Services.dll": {}
+        }
+      },
       "netstandard.library/1.6.1": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -956,7 +1024,11 @@
       "com.mega.webfront/1.0.0": {
         "dependencies": {
           "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
-          "Microsoft.AspNetCore": "1.1.2"
+          "Microsoft.AspNetCore": "1.1.2",
+          "Microsoft.ServiceFabric": "5.6.210",
+          "Microsoft.ServiceFabric.AspNetCore.WebListener": "2.6.210",
+          "Microsoft.ServiceFabric.Data": "2.6.210",
+          "Microsoft.ServiceFabric.Services": "2.6.210"
         },
         "runtime": {
           "com.mega.webfront.exe": {}
@@ -1214,6 +1286,16 @@
           "lib/net451/Microsoft.AspNetCore.Server.Kestrel.dll": {}
         }
       },
+      "microsoft.aspnetcore.server.weblistener/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting": "1.1.2",
+          "Microsoft.Net.Http.Headers": "1.1.2",
+          "Microsoft.Net.Http.Server": "1.0.0"
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNetCore.Server.WebListener.dll": {}
+        }
+      },
       "microsoft.aspnetcore.webutilities/1.1.2": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "1.1.1",
@@ -1431,7 +1513,61 @@
           "lib/netstandard1.1/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "microsoft.net.http.server/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Primitives": "1.1.1"
+        },
+        "runtime": {
+          "lib/net451/Microsoft.Net.Http.Server.dll": {}
+        }
+      },
       "microsoft.netcore.platforms/1.1.0": {},
+      "microsoft.servicefabric/5.6.210": {
+        "runtime": {
+          "lib/net45/Microsoft.ServiceFabric.Internal.Strings.dll": {},
+          "lib/net45/Microsoft.ServiceFabric.Internal.dll": {},
+          "lib/net45/System.Fabric.Management.ServiceModel.XmlSerializers.dll": {},
+          "lib/net45/System.Fabric.Management.ServiceModel.dll": {},
+          "lib/net45/System.Fabric.Strings.dll": {},
+          "lib/net45/System.Fabric.dll": {}
+        }
+      },
+      "microsoft.servicefabric.aspnetcore.weblistener/2.6.210": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting": "1.1.2",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Hosting.Server.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Http.Features": "1.1.2",
+          "Microsoft.AspNetCore.Server.WebListener": "1.0.0",
+          "Microsoft.Extensions.DependencyInjection": "1.1.1",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.1",
+          "Microsoft.ServiceFabric.Services": "2.6.210"
+        },
+        "runtime": {
+          "lib/net452/Microsoft.ServiceFabric.AspNetCore.WebListener.dll": {},
+          "lib/net452/Microsoft.ServiceFabric.AspNetCore.dll": {}
+        }
+      },
+      "microsoft.servicefabric.data/2.6.210": {
+        "dependencies": {
+          "Microsoft.ServiceFabric": "5.6.210"
+        },
+        "runtime": {
+          "lib/net45/Microsoft.ServiceFabric.Data.Interfaces.dll": {},
+          "lib/net45/Microsoft.ServiceFabric.Data.dll": {}
+        }
+      },
+      "microsoft.servicefabric.services/2.6.210": {
+        "dependencies": {
+          "Microsoft.ServiceFabric": "5.6.210",
+          "Microsoft.ServiceFabric.Data": "2.6.210"
+        },
+        "runtime": {
+          "lib/net45/Microsoft.ServiceFabric.Services.dll": {}
+        }
+      },
       "netstandard.library/1.6.1": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -1728,6 +1864,13 @@
       "path": "microsoft.aspnetcore.server.kestrel/1.1.2",
       "hashPath": "microsoft.aspnetcore.server.kestrel.1.1.2.nupkg.sha512"
     },
+    "microsoft.aspnetcore.server.weblistener/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QNViMMDGwcpapf2qsy+NuJIZ0v8ljy/f9V+5daatiZ33PB3GmkAGcQ0sE+beAfL3dOcYzpQq2qwUFSi9465/Sw==",
+      "path": "microsoft.aspnetcore.server.weblistener/1.0.0",
+      "hashPath": "microsoft.aspnetcore.server.weblistener.1.0.0.nupkg.sha512"
+    },
     "microsoft.aspnetcore.webutilities/1.1.2": {
       "type": "package",
       "serviceable": true,
@@ -1882,12 +2025,47 @@
       "path": "microsoft.net.http.headers/1.1.2",
       "hashPath": "microsoft.net.http.headers.1.1.2.nupkg.sha512"
     },
+    "microsoft.net.http.server/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1Y7Xk420YZIJ/gKHeyPYTkEb1VLydfJhxWCb35OyQmIYve/u1fcMV+9SPAOUD9ZaDmV1QALQMYNGfGwMZCQStA==",
+      "path": "microsoft.net.http.server/1.0.0",
+      "hashPath": "microsoft.net.http.server.1.0.0.nupkg.sha512"
+    },
     "microsoft.netcore.platforms/1.1.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
       "path": "microsoft.netcore.platforms/1.1.0",
       "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "microsoft.servicefabric/5.6.210": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3vWQFiMtZamLz/zgXwaGzAdK4dAZUnl2UKqzdC9rMjrZhA/J09FeEUOqyZWzO8Yf3OnXLFn9E3gw+sxm0z746Q==",
+      "path": "microsoft.servicefabric/5.6.210",
+      "hashPath": "microsoft.servicefabric.5.6.210.nupkg.sha512"
+    },
+    "microsoft.servicefabric.aspnetcore.weblistener/2.6.210": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+Y6umwdniIvKbJe/8gZOhvwz9OTDEfilDd9FOn6qBALUB9NHUpzYnb/lxdtp3FhDltra9oZoZVi01N3XLDkOTQ==",
+      "path": "microsoft.servicefabric.aspnetcore.weblistener/2.6.210",
+      "hashPath": "microsoft.servicefabric.aspnetcore.weblistener.2.6.210.nupkg.sha512"
+    },
+    "microsoft.servicefabric.data/2.6.210": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Jk2dNENgc7m+07edl2T1Fx/caR00fbpB7opdQuH8J1z7cGNgx6H7fn4o95ozkyK7QOGTI3OpUnb470tgo0e2ow==",
+      "path": "microsoft.servicefabric.data/2.6.210",
+      "hashPath": "microsoft.servicefabric.data.2.6.210.nupkg.sha512"
+    },
+    "microsoft.servicefabric.services/2.6.210": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4LioTEIJrwOrVT/U55GkWOEwR9cgbOUTJTryBkc9QM3+YzVy56acHmqxe9hwkRvVeuVqMc6RlzVu2q4zvYBbfw==",
+      "path": "microsoft.servicefabric.services/2.6.210",
+      "hashPath": "microsoft.servicefabric.services.2.6.210.nupkg.sha512"
     },
     "netstandard.library/1.6.1": {
       "type": "package",
