@@ -5,6 +5,5 @@ namespace com.mega.contract
 {
     public interface IGeneratorService:IService
     {
-        Task<JsonResponse> CallserviceAsync(JsonRpcRequest request);
     }
 }
