@@ -55,10 +55,11 @@ namespace com.mega.QueueService
                 cancellationToken.ThrowIfCancellationRequested();
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                 testCounter++;
+
                 //if (testCounter == 10 && Environment.MachineName == "NICLERCSB") // HACK for Nico test
                 //{
                 //    var qt = new QueueServiceTest();
-                //    await qt.RunTest();
+                //    await qt.RunTest(this.Context.ServiceName);
                 //}
             }
         }

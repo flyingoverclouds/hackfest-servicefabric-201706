@@ -12,21 +12,10 @@ namespace com.mega.QueueService
 {
     class QueueServiceTest
     {
-        /// <summary>
-        /// Creation of a servicefabric remoting proxy to QueueService
-        /// </summary>
-        /// <returns></returns>
-        IQueueService GetQueueServiceProxy(string queueName)
+       
+        public async Task RunTest(Uri uri)
         {
-            // TODO : implement optionnal security on remoting endpoint
-            var svcUrl = $"fabric:/Hackfest/{queueName}";
-            var queueSvcProxy = ServiceProxy.Create<IQueueService>(new Uri(svcUrl), new ServicePartitionKey());
-            return queueSvcProxy;
-        }
-
-        public async Task RunTest()
-        {
-            var queue = GetQueueServiceProxy("QueueService");
+            var queue = ServiceProxy.Create<IQueueService>(uri, new ServicePartitionKey()); 
 
             for (int n = 1; n <= 20; n++)
             {
