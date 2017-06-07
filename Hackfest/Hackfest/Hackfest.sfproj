@@ -33,8 +33,6 @@
     <Content Include="..\spro\**\*.*">
       <Link>ApplicationPackageRoot\com.mega.sproexePkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>
-    <Content Include="ApplicationPackageRoot\com.mega.sproexePkg\Config\Settings.xml" />
-    <Content Include="ApplicationPackageRoot\com.mega.sproexePkg\ServiceManifest.xml" />
     <Content Include="ApplicationPackageRoot\com.mega.sprowrapperPkg\Config\Settings.xml" />
     <Content Include="ApplicationPackageRoot\com.mega.sprowrapperPkg\ServiceManifest.xml" />
     <Content Include="packages.config" />
