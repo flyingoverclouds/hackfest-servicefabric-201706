@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="IQueueService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueClient.cs" />
     <Compile Include="QueueMessage.cs" />
   </ItemGroup>
   <ItemGroup>

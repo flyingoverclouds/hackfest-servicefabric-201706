@@ -19,7 +19,7 @@
       </ExeHost>
     </EntryPoint>
     <EnvironmentVariables>
-      <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="" />
+      <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="development" />
     </EnvironmentVariables>
   </CodePackage>
 

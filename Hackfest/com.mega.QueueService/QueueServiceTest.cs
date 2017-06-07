@@ -30,13 +30,13 @@ namespace com.mega.QueueService
 
             for (int n = 1; n <= 20; n++)
             {
-                await queue.PushAsync(new QueueMessage() { Payload = $"#{n} {DateTime.Now}" });
+                await queue.PushAsync(new QueueMessage() { CreatedDateTime= DateTime.Now });
             }
             Debug.WriteLine("Message count in queue :  " + await queue.GetCountAsync());
             var m = await queue.GetMessageAsync();
             while(m!=null)
             {
-                Debug.WriteLine("Message : " + m.Payload);
+                Debug.WriteLine("Message : " + m.Language);
                 m = await queue.GetMessageAsync();
             }
             Debug.WriteLine("Message count in queue :  " + await queue.GetCountAsync());

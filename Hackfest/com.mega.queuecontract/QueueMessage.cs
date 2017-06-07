@@ -11,6 +11,9 @@ namespace com.mega.queuecontract
     public class QueueMessage
     {
         [DataMember]
-        public string Payload { get; set; }
+        public string Language { get; set; }
+
+        [DataMember]
+        public DateTime CreatedDateTime { get; set; }
     }
 }

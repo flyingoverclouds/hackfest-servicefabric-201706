@@ -16,6 +16,7 @@ button {
     border-radius: 0;
     width: 100%;
     height: 50%;
+    background-color: #1aaaf8;
 }
 
     button[type="submit"] {
@@ -27,14 +28,6 @@ button {
         float: right;
         padding-right: 30px;
         margin-top: 3px;
-    }
-
-    button.a {
-        background-color: #1aaaf8;
-    }
-
-    button.b {
-        background-color: #00cbca;
     }
 
 #tip {
@@ -71,7 +64,7 @@ button {
         color: #254356;
     }
 
-#choice {
+#form{
     transition: all 300ms linear;
     line-height: 1.3em;
     display: inline;
@@ -79,18 +72,23 @@ button {
     font-size: 3em;
 }
 
-    #choice a {
+    #form a {
         text-decoration: none;
     }
 
-        #choice a:hover, #choice a:focus {
+        #form a:hover, #choice a:focus {
             outline: 0;
             text-decoration: underline;
         }
 
-    #choice button {
+    #language{
+        height: 30px;
+        width: 330px;
+    }
+
+    #form button {
         display: block;
-        height: 80px;
+        height: 50px;
         width: 330px;
         border: none;
         color: white;
@@ -103,20 +101,12 @@ button {
         padding-left: 50px;
     }
 
-        #choice button.a:hover {
+        #form button a:hover {
             background-color: #1488c6;
         }
 
-        #choice button.b:hover {
-            background-color: #00a2a1;
-        }
-
-        #choice button.a:focus {
+        #form button a:focus {
             background-color: #1488c6;
-        }
-
-        #choice button.b:focus {
-            background-color: #00a2a1;
         }
 
 #background-stats {

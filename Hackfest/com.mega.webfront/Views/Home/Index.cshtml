@@ -13,11 +13,12 @@
     <div id="content-container">
         <div id="content-container-center">
             <h3>Mega</h3>
-            <form id="choice" asp-controller="Home" asp-action="Index" method="post">
+            <form id="form" asp-controller="Home" asp-action="Index" method="post">
+                <input id="language" name="language" type="text">
                 <button id="submit" type="submit">Submit</button>
             </form>
             <div id="tip">
-                (Microservices Hackfest)
+                @ViewData["FormData"]
             </div>
             <div id="hostname">
                 Processed by host @ViewData["Hostname"]
