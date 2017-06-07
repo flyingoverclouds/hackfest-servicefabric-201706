@@ -106,7 +106,7 @@ namespace com.mega.QueueService
             return null;
         }
 
-        public async void PushAsync(QueueMessage message)
+        public async Task PushAsync(QueueMessage message)
         {
             try
             {
