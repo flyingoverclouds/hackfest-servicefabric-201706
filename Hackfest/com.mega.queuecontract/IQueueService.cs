@@ -9,7 +9,7 @@ namespace com.mega.queuecontract
 {
     public interface IQueueService : IService
     {
-        void PushAsync(QueueMessage message);
+        Task PushAsync(QueueMessage message);
 
         Task<QueueMessage> GetMessageAsync();
 

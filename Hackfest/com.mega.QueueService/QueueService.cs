@@ -48,12 +48,22 @@ namespace com.mega.QueueService
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
+            int testCounter = 0;
+
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                testCounter++;
+                //if (testCounter==20 && Environment.MachineName=="NICLERCSB") // HACK for Nico test
+                //{
+                //    var qt = new QueueServiceTest();
+                //    await qt.RunTest(); 
+                //}
             }
         }
+
+        
 
         public async Task<long> GetCountAsync()
         {
@@ -97,7 +107,7 @@ namespace com.mega.QueueService
             return null;
         }
 
-        public async void PushAsync(QueueMessage message)
+        public async Task PushAsync(QueueMessage message)
         {
             try
             {
