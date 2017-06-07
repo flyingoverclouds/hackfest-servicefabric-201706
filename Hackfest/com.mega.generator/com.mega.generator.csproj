@@ -93,10 +93,13 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Nativesession.cs" />
+    <Compile Include="NativesessionGrpc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="generator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ServiceEventSource.cs" />
+    <Compile Include="ServiceUriBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PackageRoot\Config\Settings.xml" />
@@ -108,6 +111,10 @@
     <ProjectReference Include="..\com.mega.contract\com.mega.contract.csproj">
       <Project>{7968C40E-9632-459F-8052-BF853B1EADE9}</Project>
       <Name>com.mega.contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\com.mega.queuecontract\com.mega.queuecontract.csproj">
+      <Project>{7044EAFA-B676-4910-A30C-4A3574D9AB03}</Project>
+      <Name>com.mega.queuecontract</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

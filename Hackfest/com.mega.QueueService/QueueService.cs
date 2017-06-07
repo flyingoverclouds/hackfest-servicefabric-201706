@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Fabric.Query;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace com.mega.QueueService
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class QueueService : StatefulService , IQueueService
+    internal sealed class QueueService : Microsoft.ServiceFabric.Services.Runtime.StatefulService, IQueueService
     {
         private const string QueueName = "messageQueue";
         public QueueService(StatefulServiceContext context)
