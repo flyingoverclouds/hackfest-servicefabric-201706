@@ -32,14 +32,14 @@ namespace com.mega.QueueService
             {
                 await queue.PushAsync(new QueueMessage() { Payload = $"#{n} {DateTime.Now}" });
             }
-            Debug.WriteLine("Message count in queue :  " + await queue.GetCountAsync());
+            Debug.WriteLine("A-Message count in queue :  " + await queue.GetCountAsync());
             var m = await queue.GetMessageAsync();
             while(m!=null)
             {
                 Debug.WriteLine("Message : " + m.Payload);
                 m = await queue.GetMessageAsync();
             }
-            Debug.WriteLine("Message count in queue :  " + await queue.GetCountAsync());
+            Debug.WriteLine("B-Message count in queue :  " + await queue.GetCountAsync());
         }
     }
 }
