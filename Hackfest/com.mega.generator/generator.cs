@@ -4,8 +4,12 @@ using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
 using com.mega.contract;
+using com.mega.queuecontract;
 using Grpc.Core;
+using Mega;
+using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Client;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 
@@ -28,17 +32,58 @@ namespace com.mega.generator
             : base(context)
         { }
 
-        protected override Task RunAsync(CancellationToken cancellationToken)
+        protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             while (true)
             {
-                //this.Quee
+                var builder = new ServiceUriBuilder("RequestQueue");
+
+                var requestService = ServiceProxy.Create<IQueueService>(builder.ToUri(), new ServicePartitionKey());
+                var message = await requestService.GetMessageAsync();
+
+                if (message != null)
+                {
+                    var response = await CallserviceAsync(message);
+                    var responseMessage = new QueueMessage {Payload = response};
+
+                    var builderResponse = new ServiceUriBuilder("AnswerQueue");
+
+                    var responseQueue =
+                        ServiceProxy.Create<IQueueService>(builderResponse.ToUri(), new ServicePartitionKey());
+
+                    responseQueue.PushAsync(responseMessage);
+
+                    Thread.Sleep(250);
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
             }
         }
 
-        public Task<JsonResponse> CallserviceAsync(JsonRpcRequest request)
+        private async Task<string> CallserviceAsync(QueueMessage message)
         {
-            throw new Exception();
+            var channel = new Channel("127.0.0.1", 50051, ChannelCredentials.Insecure);
+
+            var client =
+                new NativeSession.NativeSessionClient(channel);
+
+            var request = new GenerateRequest
+            {
+                Username = "admin",
+                Type = "BPMN",
+                Payload = DateTime.Now.Ticks.ToString()
+            };
+
+
+            var generateReply = await client.GenerateAsync(request, new CallOptions());
+
+            var response = generateReply.Response;
+
+            channel.ShutdownAsync().Wait();
+
+            return response;
         }
     }
 }
