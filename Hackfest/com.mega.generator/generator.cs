@@ -20,6 +20,8 @@ namespace com.mega.generator
     /// </summary>
     internal sealed class Generator : StatelessService, IGeneratorService
     {
+        private string _queueName;
+
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
             return new[]
@@ -30,13 +32,15 @@ namespace com.mega.generator
 
         public Generator(StatelessServiceContext context)
             : base(context)
-        { }
+        {
+            _queueName = System.Text.Encoding.Default.GetString(context.InitializationData);
+        }
 
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             while (true)
             {
-                var builder = new ServiceUriBuilder("RequestQueue");
+                var builder = new ServiceUriBuilder("Request_" + _queueName);
 
                 var requestService = ServiceProxy.Create<IQueueService>(builder.ToUri(), new ServicePartitionKey());
                 var message = await requestService.GetMessageAsync();
@@ -46,12 +50,12 @@ namespace com.mega.generator
                     var response = await CallserviceAsync(message);
                     var responseMessage = new QueueMessage {Language = response};
 
-                    var builderResponse = new ServiceUriBuilder("AnswerQueue");
+                    var builderResponse = new ServiceUriBuilder("Answer_" + _queueName);
 
                     var responseQueue =
                         ServiceProxy.Create<IQueueService>(builderResponse.ToUri(), new ServicePartitionKey());
 
-                    responseQueue.PushAsync(responseMessage);
+                    await responseQueue.PushAsync(responseMessage).ConfigureAwait(false);
 
                     Thread.Sleep(250);
                 }
