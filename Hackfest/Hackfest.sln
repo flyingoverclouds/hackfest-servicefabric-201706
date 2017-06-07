@@ -5,11 +5,15 @@ VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "Hackfest", "Hackfest\Hackfest.sfproj", "{B1FA3C07-3B83-4A80-8B25-BCA7B8B28F20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.webfront", "com.mega.webfront\com.mega.webfront.csproj", "{D1A98669-41AF-4B72-BFB8-AA5F82718FBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "com.mega.webfront", "com.mega.webfront\com.mega.webfront.csproj", "{D1A98669-41AF-4B72-BFB8-AA5F82718FBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.generator", "com.mega.generator\com.mega.generator.csproj", "{B23C4143-0633-443D-8E37-F9C6C5E6522E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.contract", "com.mega.contract\com.mega.contract.csproj", "{7968C40E-9632-459F-8052-BF853B1EADE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.queuecontract", "com.mega.queuecontract\com.mega.queuecontract.csproj", "{7044EAFA-B676-4910-A30C-4A3574D9AB03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.QueueService", "com.mega.QueueService\com.mega.QueueService.csproj", "{D57F499A-2655-4A3C-83DB-6C5E354F467C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,20 @@ Global
 		{7968C40E-9632-459F-8052-BF853B1EADE9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7968C40E-9632-459F-8052-BF853B1EADE9}.Release|x64.ActiveCfg = Release|Any CPU
 		{7968C40E-9632-459F-8052-BF853B1EADE9}.Release|x64.Build.0 = Release|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Debug|x64.Build.0 = Debug|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Release|x64.ActiveCfg = Release|Any CPU
+		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Release|x64.Build.0 = Release|Any CPU
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Debug|x64.ActiveCfg = Debug|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Debug|x64.Build.0 = Debug|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Release|Any CPU.ActiveCfg = Release|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Release|x64.ActiveCfg = Release|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
