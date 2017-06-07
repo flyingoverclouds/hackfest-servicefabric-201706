@@ -7,17 +7,21 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using com.mega.queuecontract;
 
 namespace com.mega.QueueService
 {
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class QueueService : StatefulService
+    internal sealed class QueueService : StatefulService , IQueueService
     {
+        private const string QueueName = "messageQueue";
         public QueueService(StatefulServiceContext context)
             : base(context)
         { }
+
 
         /// <summary>
         /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
@@ -28,7 +32,12 @@ namespace com.mega.QueueService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new ServiceReplicaListener[0];
+            // TODO : implement security on remoting endpoint
+            var listeners = new ServiceReplicaListener[1]
+            {
+                new ServiceReplicaListener( (context) => this.CreateServiceRemotingListener(context), "ServiceEndpoint")
+            };
+            return listeners;
         }
 
         /// <summary>
@@ -38,30 +47,69 @@ namespace com.mega.QueueService
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
-
-            var myDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, long>>("myDictionary");
-
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+            }
+        }
 
+        public async Task<long> GetCountAsync()
+        {
+            try
+            {
+                var queue = await this.StateManager.GetOrAddAsync<IReliableQueue<QueueMessage>>(QueueName).ConfigureAwait(false);
                 using (var tx = this.StateManager.CreateTransaction())
                 {
-                    var result = await myDictionary.TryGetValueAsync(tx, "Counter");
+                    var count = await queue.GetCountAsync(tx).ConfigureAwait(false);
+                    tx.Abort();
+                    return count;
+                }
+            }
+            catch (Exception ex)
+            {
+                ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.GetMessageAsync() EXCEPTION : {ex}");
+                return 0; // HACK : should not return a value if exception occured !!!
+            }
+        }
 
-                    ServiceEventSource.Current.ServiceMessage(this.Context, "Current Counter Value: {0}",
-                        result.HasValue ? result.Value.ToString() : "Value does not exist.");
+        public async Task<QueueMessage> GetMessageAsync()
+        {
+            try
+            {
+                var queue = await this.StateManager.GetOrAddAsync<IReliableQueue<QueueMessage>>(QueueName).ConfigureAwait(false);
+                using (var tx = this.StateManager.CreateTransaction())
+                {
+                    var msgCV = await queue.TryDequeueAsync(tx).ConfigureAwait(false) ;
+                    if (msgCV.HasValue)
+                    {
+                        await tx.CommitAsync();
+                        return msgCV.Value;
+                    }
+                    tx.Abort();
+                }
+            }
+            catch (Exception ex)
+            {
+                ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.GetMessageAsync() EXCEPTION : {ex}");
+            }
+            return null;
+        }
 
-                    await myDictionary.AddOrUpdateAsync(tx, "Counter", 0, (key, value) => ++value);
-
-                    // If an exception is thrown before calling CommitAsync, the transaction aborts, all changes are 
-                    // discarded, and nothing is saved to the secondary replicas.
+        public async void PushAsync(QueueMessage message)
+        {
+            try
+            {
+                var queue = await this.StateManager.GetOrAddAsync<IReliableQueue<QueueMessage>>(QueueName).ConfigureAwait(false);
+                using (var tx = this.StateManager.CreateTransaction())
+                {
+                    await queue.EnqueueAsync(tx, message);
                     await tx.CommitAsync();
                 }
-
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+            }
+            catch(Exception ex)
+            {
+                ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.PushAsync() EXCEPTION : {ex}");
             }
         }
     }

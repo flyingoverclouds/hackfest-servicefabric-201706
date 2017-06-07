@@ -17,3 +17,12 @@ C:\Sources\MegaHackFest2\Hackfest\com.mega.generator\bin\x64\Debug\System.Fabric
 C:\Sources\MegaHackFest2\Hackfest\com.mega.generator\obj\x64\Debug\com.mega.generator.csprojResolveAssemblyReference.cache
 C:\Sources\MegaHackFest2\Hackfest\com.mega.generator\obj\x64\Debug\com.mega.generator.exe
 C:\Sources\MegaHackFest2\Hackfest\com.mega.generator\obj\x64\Debug\com.mega.generator.pdb
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\bin\x64\Debug\com.mega.generator.exe.config
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\bin\x64\Debug\com.mega.generator.exe
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\bin\x64\Debug\com.mega.generator.pdb
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\bin\x64\Debug\Microsoft.ServiceFabric.Data.Interfaces.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\bin\x64\Debug\System.Fabric.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\bin\x64\Debug\System.Fabric.Strings.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\obj\x64\Debug\com.mega.generator.exe
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\obj\x64\Debug\com.mega.generator.pdb
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.generator\obj\x64\Debug\com.mega.generator.csprojResolveAssemblyReference.cache
