@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.contract", "com.me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.queuecontract", "com.mega.queuecontract\com.mega.queuecontract.csproj", "{7044EAFA-B676-4910-A30C-4A3574D9AB03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.mega.QueueService", "com.mega.QueueService\com.mega.QueueService.csproj", "{D57F499A-2655-4A3C-83DB-6C5E354F467C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,12 @@ Global
 		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Release|x64.ActiveCfg = Release|Any CPU
 		{7044EAFA-B676-4910-A30C-4A3574D9AB03}.Release|x64.Build.0 = Release|Any CPU
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Debug|x64.ActiveCfg = Debug|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Debug|x64.Build.0 = Debug|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Release|Any CPU.ActiveCfg = Release|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Release|x64.ActiveCfg = Release|x64
+		{D57F499A-2655-4A3C-83DB-6C5E354F467C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,3 +20,15 @@ C:\Sources\MegaHackFest2\Hackfest\com.mega.contract\bin\Debug\System.Fabric.xml
 C:\Sources\MegaHackFest2\Hackfest\com.mega.contract\obj\Debug\com.mega.contract.csprojResolveAssemblyReference.cache
 C:\Sources\MegaHackFest2\Hackfest\com.mega.contract\obj\Debug\com.mega.contract.dll
 C:\Sources\MegaHackFest2\Hackfest\com.mega.contract\obj\Debug\com.mega.contract.pdb
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\com.mega.contract.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\com.mega.contract.pdb
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\Microsoft.ServiceFabric.Data.Interfaces.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\System.Fabric.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\System.Fabric.Strings.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\Microsoft.ServiceFabric.Data.xml
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\Microsoft.ServiceFabric.FabricTransport.xml
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\Microsoft.ServiceFabric.Services.xml
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\bin\Debug\Microsoft.ServiceFabric.Services.Remoting.xml
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\obj\Debug\com.mega.contract.csprojResolveAssemblyReference.cache
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\obj\Debug\com.mega.contract.dll
+C:\repos\mega-hackfest\mycode\Hackfest\com.mega.contract\obj\Debug\com.mega.contract.pdb

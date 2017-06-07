@@ -31,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.mega.generator\com.mega.generator.csproj" />
+    <ProjectReference Include="..\com.mega.QueueService\com.mega.QueueService.csproj" />
     <ProjectReference Include="..\com.mega.webfront\com.mega.webfront.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
