@@ -94,16 +94,29 @@ namespace com.mega.generator
             var url = new ServiceUriBuilder(urlPath).ToUri();
             var fabricClient = new FabricClient();
 
-            var service = await fabricClient.ServiceManager.GetServiceDescriptionAsync(url);
+            ServiceDescription service=null;
+            try
+            {
+                service = await fabricClient.ServiceManager.GetServiceDescriptionAsync(url);
+            }
+            catch (Exception ex)
+            {
+                service = null;
+                // nothing -> exception mean no service with name
+            }
             if (service == null)
             {
-                await fabricClient.ServiceManager.CreateServiceAsync(new StatefulServiceDescription
+
+                StatelessServiceDescription newGeneratorDescription = new StatelessServiceDescription()
                 {
                     ApplicationName = new Uri(this.Context.CodePackageActivationContext.ApplicationName),
                     ServiceName = url,
-                    HasPersistedState = true,
-                    ServiceTypeName = urlPath
-                }).ConfigureAwait(false);
+                    InstanceCount=1,
+                    ServiceTypeName = "com.mega.SproGuestExeType",
+                    PartitionSchemeDescription = new SingletonPartitionSchemeDescription()
+                };
+
+                await fabricClient.ServiceManager.CreateServiceAsync(newGeneratorDescription).ConfigureAwait(false);
 
                 service = await fabricClient.ServiceManager.GetServiceDescriptionAsync(url);
             }
