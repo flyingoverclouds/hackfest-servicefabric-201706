@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IGeneratorService.cs" />
+    <Compile Include="IResultService.cs" />
     <Compile Include="JsonRpcRequest.cs" />
     <Compile Include="JsonResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

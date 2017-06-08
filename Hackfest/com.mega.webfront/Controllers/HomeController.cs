@@ -15,18 +15,15 @@ namespace com.mega.webfront.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(string language)
+        public async Task<IActionResult> Index(string sessionType, string username)
         {
             ViewData["Hostname"] = Environment.MachineName;
-            ViewData["FormData"] = language;
 
-            var queueClient = QueueClient.Create();
-            var message = new QueueMessage()
-            {
-                Language = language,
-            };
+            var queueClient = QueueClient.Create("RequestQueue");
+            var message = new QueueMessage(sessionType, username);
 
-            await queueClient.PushAsync(message);
+            var response = await queueClient.PushAsync(message);
+            ViewData["FormData"] = response.Item2;
             return View();
         }
 
