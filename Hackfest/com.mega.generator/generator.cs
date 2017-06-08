@@ -35,6 +35,9 @@ namespace com.mega.generator
             : base(context)
         {
             _queueName = System.Text.Encoding.Default.GetString(context.InitializationData);
+            if (string.IsNullOrEmpty(_queueName)) // HACK for dev environment (defaultServices instanciation)
+                _queueName = "RequestQueue";
+
         }
 
         protected override async Task RunAsync(CancellationToken cancellationToken)
