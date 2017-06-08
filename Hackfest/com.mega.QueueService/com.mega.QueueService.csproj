@@ -86,7 +86,9 @@
     <Compile Include="QueueService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="QueueServiceTest.cs" />
+    <Compile Include="ScalingRule.cs" />
     <Compile Include="ServiceEventSource.cs" />
+    <Compile Include="StatelessServiceScaler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PackageRoot\Config\Settings.xml" />

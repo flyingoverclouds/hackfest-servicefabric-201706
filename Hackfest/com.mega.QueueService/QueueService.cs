@@ -18,6 +18,8 @@ namespace com.mega.QueueService
     /// </summary>
     internal sealed class QueueService : Microsoft.ServiceFabric.Services.Runtime.StatefulService, IQueueService
     {
+        StatelessServiceScaler scaler = null;
+
         private const string QueueName = "messageQueue";
         public QueueService(StatefulServiceContext context)
             : base(context)
@@ -48,6 +50,18 @@ namespace com.mega.QueueService
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
+            var rule = new ScalingRule()
+            {
+                MinimalInstanceCount = 1, // always maintain 1 instance up
+                MaximalInstanceCount = 5, // maximum is 5 instance count
+                DecreaseThreshold = 1, // decrease instance count if less than 1 message in queue
+                IncreaseThreshold = 10, // increase +1 instance count if higher than 10 message in queue
+                DelayBetweenScaling = 10 
+            };
+
+            // TODO : replace the services names to scale by dynamic name constructing/retrieving.
+            scaler = new StatelessServiceScaler(cancellationToken, rule, "fabric://Hackfest/generator");
+
             await base.RunAsync(cancellationToken);
         }
 
@@ -72,6 +86,7 @@ namespace com.mega.QueueService
 
         public async Task<QueueMessage> GetMessageAsync()
         {
+            long count = -1;
             try
             {
                 var queue = await this.StateManager.GetOrAddAsync<IReliableQueue<QueueMessage>>(QueueName).ConfigureAwait(false);
@@ -80,6 +95,7 @@ namespace com.mega.QueueService
                     var msgCV = await queue.TryDequeueAsync(tx).ConfigureAwait(false) ;
                     if (msgCV.HasValue)
                     {
+                        count = await  queue.GetCountAsync(tx);
                         await tx.CommitAsync();
                         return msgCV.Value;
                     }
@@ -90,25 +106,34 @@ namespace com.mega.QueueService
             {
                 ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.GetMessageAsync() EXCEPTION : {ex}");
             }
+            finally
+            {
+                scaler?.UpdateMetric(count);
+            }
             return null;
         }
 
         public async Task PushAsync(QueueMessage message)
         {
             message.CreatedDateTime = DateTime.UtcNow;
-
+            long count = -1;
             try
             {
                 var queue = await this.StateManager.GetOrAddAsync<IReliableQueue<QueueMessage>>(QueueName).ConfigureAwait(false);
                 using (var tx = this.StateManager.CreateTransaction())
                 {
                     await queue.EnqueueAsync(tx, message);
+                    count = await queue.GetCountAsync(tx);
                     await tx.CommitAsync();
                 }
             }
             catch(Exception ex)
             {
                 ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.PushAsync() EXCEPTION : {ex}");
+            }
+            finally
+            {
+                scaler?.UpdateMetric(count);
             }
         }
     }
