@@ -100,6 +100,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="ServiceEventSource.cs" />
     <Compile Include="ServiceUriBuilder.cs" />
+    <Compile Include="SprocAddressStruct.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PackageRoot\Config\Settings.xml" />

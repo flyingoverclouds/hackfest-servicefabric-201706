@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Fabric.Description;
 using System.Threading;
 using System.Threading.Tasks;
 using com.mega.contract;
@@ -40,35 +41,30 @@ namespace com.mega.generator
         {
             while (true)
             {
-                var builder = new ServiceUriBuilder("Request_" + _queueName);
-
-                var requestService = ServiceProxy.Create<IQueueService>(builder.ToUri(), new ServicePartitionKey());
-                var message = await requestService.GetMessageAsync();
+                var queueClient = QueueClient.Create(_queueName);
+                var message = await queueClient.GetMessageAsync();
 
                 if (message != null)
                 {
                     var response = await CallserviceAsync(message);
                     var responseMessage = new QueueMessage("sessionType", "userName");
 
-                    var builderResponse = new ServiceUriBuilder("Answer_" + _queueName);
+                    var answerQueue = QueueClient.Create("AnswerQueue");
 
-                    var responseQueue =
-                        ServiceProxy.Create<IQueueService>(builderResponse.ToUri(), new ServicePartitionKey());
-
-                    await responseQueue.PushAsync(responseMessage).ConfigureAwait(false);
-
-                    Thread.Sleep(250);
+                    await answerQueue.PushAsync(responseMessage).ConfigureAwait(false);
                 }
                 else
                 {
-                    Thread.Sleep(1000);
+                    await Task.Delay(1000);
                 }
             }
         }
 
         private async Task<string> CallserviceAsync(QueueMessage message)
         {
-            var channel = new Channel("127.0.0.1", 50051, ChannelCredentials.Insecure);
+            var sprocInstance = await GetSprocInstanceAsync(message.SessionType, message.UserName);
+
+            var channel = new Channel(sprocInstance.Ip, sprocInstance.Port, ChannelCredentials.Insecure);
 
             var client =
                 new NativeSession.NativeSessionClient(channel);
@@ -88,6 +84,38 @@ namespace com.mega.generator
             channel.ShutdownAsync().Wait();
 
             return response;
+        }
+
+        private async Task<SprocAddressStruct> GetSprocInstanceAsync(string messageSessionType, string messageUserName)
+        {
+            var urlPath = $"SPROC_{messageSessionType}_{messageUserName}";
+
+            var url = new ServiceUriBuilder(urlPath).ToUri();
+            var fabricClient = new FabricClient();
+
+            var service = await fabricClient.ServiceManager.GetServiceDescriptionAsync(url);
+
+            if (service == null)
+            {
+                await fabricClient.ServiceManager.CreateServiceAsync(new StatefulServiceDescription
+                {
+                    ApplicationName = new Uri(this.Context.CodePackageActivationContext.ApplicationName),
+                    ServiceName = url,
+                    HasPersistedState = true,
+                    ServiceTypeName = urlPath
+                }).ConfigureAwait(false);
+
+                service = await fabricClient.ServiceManager.GetServiceDescriptionAsync(url);
+            }
+
+            var serviceName = service?.ServiceName;
+
+            if(serviceName != null)
+                return new SprocAddressStruct { Ip = serviceName.Host, Port = serviceName.Port };
+
+            ServiceEventSource.Current.ServiceMessage(this.Context, $"can not instanciate service {0}", urlPath);
+
+            throw new Exception(string.Format($"can not instanciate service {0}", urlPath));
         }
     }
 }
