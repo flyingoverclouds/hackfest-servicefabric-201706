@@ -45,11 +45,6 @@
         <UniformInt64Partition PartitionCount="[Result_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>
-    <Service Name="AnswerQueue">
-      <StatefulService ServiceTypeName="QueueServiceType" TargetReplicaSetSize="[QueueService_TargetReplicaSetSize]" MinReplicaSetSize="[QueueService_MinReplicaSetSize]">
-        <SingletonPartition />
-      </StatefulService>
-    </Service>
     <Service Name="RequestQueue">
       <StatefulService ServiceTypeName="QueueServiceType" TargetReplicaSetSize="[QueueService_TargetReplicaSetSize]" MinReplicaSetSize="[QueueService_MinReplicaSetSize]">
         <SingletonPartition />
