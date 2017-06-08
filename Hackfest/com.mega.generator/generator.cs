@@ -11,6 +11,8 @@ using Mega;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using Microsoft.ServiceFabric.Services.Client;
+using System.Linq;
 
 namespace com.mega.generator
 {
@@ -117,15 +119,23 @@ namespace com.mega.generator
 
                 service = await fabricClient.ServiceManager.GetServiceDescriptionAsync(url);
             }
+            
+            ServicePartitionResolver resolver = ServicePartitionResolver.GetDefault();
+            ResolvedServicePartition partition = await resolver.ResolveAsync(service.ServiceName,
+                new ServicePartitionKey(), CancellationToken.None);
 
-            var serviceName = service?.ServiceName;
-            if (serviceName != null)
-            {
-                return new SprocAddressStruct { Ip = serviceName.Host, Port = serviceName.Port };
-            }
+            var s = partition.Endpoints.First();
+            // s.Address == {"Endpoints":{"com.mega.SproGuestExeTypeEndpoint":"localhost:33039"}}
 
-            ServiceEventSource.Current.ServiceMessage(this.Context, $"Unable to instantiate service {0}", urlPath);
-            throw new Exception(string.Format($"Unable to instantiate service {0}", urlPath));
+            // HACK : exytraction fqdn : should using json deserialization instead of this bad hack
+            int start = s.Address.IndexOf(":\"")+2;
+            int stop = s.Address.IndexOf("\"", start);
+            var fqdn = s.Address.Substring(start, stop - start);
+
+            var parts = fqdn.Split(':');
+
+            
+            return new SprocAddressStruct { Ip = parts[0], Port = Convert.ToInt32(parts[1]) };
         }
     }
 }
