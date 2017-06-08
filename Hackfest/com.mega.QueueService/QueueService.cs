@@ -10,6 +10,7 @@ using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using com.mega.queuecontract;
+using System.Net;
 
 namespace com.mega.QueueService
 {
@@ -93,9 +94,10 @@ namespace com.mega.QueueService
             return null;
         }
 
-        public async Task PushAsync(QueueMessage message)
+        public async Task<Tuple<HttpStatusCode, QueueMessage>> PushAsync(QueueMessage message)
         {
             message.CreatedDateTime = DateTime.UtcNow;
+            message.MessageId = Guid.NewGuid();
 
             try
             {
@@ -105,10 +107,13 @@ namespace com.mega.QueueService
                     await queue.EnqueueAsync(tx, message);
                     await tx.CommitAsync();
                 }
+
+                return Tuple.Create(HttpStatusCode.OK, message);
             }
             catch(Exception ex)
             {
                 ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.PushAsync() EXCEPTION : {ex}");
+                return Tuple.Create(HttpStatusCode.InternalServerError, message);
             }
         }
     }

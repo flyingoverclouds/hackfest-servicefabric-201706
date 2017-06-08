@@ -64,12 +64,12 @@ button {
         color: #254356;
     }
 
-#form{
+#form {
     transition: all 300ms linear;
-    line-height: 1.3em;
+    line-height: 2.5em;
     display: inline;
     vertical-align: middle;
-    font-size: 3em;
+    font-size: 1em;
 }
 
     #form a {
@@ -81,9 +81,14 @@ button {
             text-decoration: underline;
         }
 
-    #language{
+    #sessionType{
         height: 30px;
-        width: 330px;
+        width: 250px;
+    }
+
+    #userName{
+        height: 30px;
+        width: 250px;
     }
 
     #form button {

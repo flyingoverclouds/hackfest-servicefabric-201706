@@ -11,9 +11,21 @@ namespace com.mega.queuecontract
     public class QueueMessage
     {
         [DataMember]
-        public string Language { get; set; }
+        public Guid MessageId { get; set; }
+
+        [DataMember]
+        public string SessionType { get; set; }
+
+        [DataMember]
+        public string UserName { get; set; }
 
         [DataMember]
         public DateTime CreatedDateTime { get; set; }
+
+        public QueueMessage(string sessionType, string username)
+        {
+            this.SessionType = sessionType;
+            this.UserName = username;
+        }
     }
 }

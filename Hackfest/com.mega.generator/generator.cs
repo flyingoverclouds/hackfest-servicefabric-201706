@@ -48,7 +48,7 @@ namespace com.mega.generator
                 if (message != null)
                 {
                     var response = await CallserviceAsync(message);
-                    var responseMessage = new QueueMessage {Language = response};
+                    var responseMessage = new QueueMessage("sessionType", "userName");
 
                     var builderResponse = new ServiceUriBuilder("Answer_" + _queueName);
 
