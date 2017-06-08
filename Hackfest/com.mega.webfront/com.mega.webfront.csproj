@@ -26,10 +26,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ServiceFabric.FabricTransport">
-      <HintPath>..\..\..\..\test-mega\Hackfest\packages\Microsoft.ServiceFabric.FabricTransport.Internal.2.6.210\lib\net45\Microsoft.ServiceFabric.FabricTransport.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ServiceFabric.FabricTransport.Internal.2.6.210\lib\net45\Microsoft.ServiceFabric.FabricTransport.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceFabric.Services.Remoting">
-      <HintPath>..\..\..\..\test-mega\Hackfest\packages\Microsoft.ServiceFabric.Services.Remoting.2.6.210\lib\net45\Microsoft.ServiceFabric.Services.Remoting.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ServiceFabric.Services.Remoting.2.6.210\lib\net45\Microsoft.ServiceFabric.Services.Remoting.dll</HintPath>
     </Reference>
   </ItemGroup>
 

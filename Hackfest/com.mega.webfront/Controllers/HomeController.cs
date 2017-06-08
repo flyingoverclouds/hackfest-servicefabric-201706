@@ -20,12 +20,12 @@ namespace com.mega.webfront.Controllers
             ViewData["Hostname"] = Environment.MachineName;
             ViewData["FormData"] = language;
 
-            var queueClient = QueueClient.Create("QueueService");
-
+            var queueClient = QueueClient.Create();
             var message = new QueueMessage()
             {
                 Language = language,
             };
+
             await queueClient.PushAsync(message);
             return View();
         }

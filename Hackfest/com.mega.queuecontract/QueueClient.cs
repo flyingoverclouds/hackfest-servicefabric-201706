@@ -6,9 +6,9 @@ namespace com.mega.queuecontract
 {
     public class QueueClient
     {
-        public static IQueueService Create(string queueName)
+        public static IQueueService Create()
         {
-            var svcUrl = $"fabric:/Hackfest/{queueName}";
+            var svcUrl = $"fabric:/Hackfest/QueueService";
             return ServiceProxy.Create<IQueueService>(new Uri(svcUrl), new ServicePartitionKey());
         }
     }
