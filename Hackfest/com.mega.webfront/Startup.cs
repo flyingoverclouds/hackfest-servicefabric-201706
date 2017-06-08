@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using com.mega.webfront.Middleware;
 
 namespace com.mega.webfront
 {
@@ -48,6 +49,8 @@ namespace com.mega.webfront
             }
 
             app.UseStaticFiles();
+            app.UseWebSockets();
+            app.UseMiddleware<WebSocketMiddleware>();
 
             app.UseMvc(routes =>
             {
