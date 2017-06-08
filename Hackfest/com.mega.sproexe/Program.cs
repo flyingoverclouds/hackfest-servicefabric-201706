@@ -123,7 +123,6 @@ namespace com.mega.sproexe
     }
 
     public delegate void EmptySproHandler(object sender, EventArgs e);
-    public event EmptySproHandler EmptiedSpro;
 
     private string _sessionsType = null;
     private ConcurrentDictionary<string, Timer> _usersInSession = new ConcurrentDictionary<string, Timer>();
