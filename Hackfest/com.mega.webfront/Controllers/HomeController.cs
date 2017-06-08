@@ -19,7 +19,7 @@ namespace com.mega.webfront.Controllers
         {
             ViewData["Hostname"] = Environment.MachineName;
 
-            var queueClient = QueueClient.Create();
+            var queueClient = QueueClient.Create("RequestQueue");
             var message = new QueueMessage(sessionType, username);
 
             var response = await queueClient.PushAsync(message);

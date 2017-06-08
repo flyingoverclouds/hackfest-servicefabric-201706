@@ -40,28 +40,21 @@ namespace com.mega.generator
         {
             while (true)
             {
-                var builder = new ServiceUriBuilder("Request_" + _queueName);
-
-                var requestService = ServiceProxy.Create<IQueueService>(builder.ToUri(), new ServicePartitionKey());
-                var message = await requestService.GetMessageAsync();
+                var queueClient = QueueClient.Create(_queueName);
+                var message = await queueClient.GetMessageAsync();
 
                 if (message != null)
                 {
                     var response = await CallserviceAsync(message);
                     var responseMessage = new QueueMessage("sessionType", "userName");
 
-                    var builderResponse = new ServiceUriBuilder("Answer_" + _queueName);
+                    var answerQueue = QueueClient.Create("AnswerQueue");
 
-                    var responseQueue =
-                        ServiceProxy.Create<IQueueService>(builderResponse.ToUri(), new ServicePartitionKey());
-
-                    await responseQueue.PushAsync(responseMessage).ConfigureAwait(false);
-
-                    Thread.Sleep(250);
+                    await answerQueue.PushAsync(responseMessage).ConfigureAwait(false);
                 }
                 else
                 {
-                    Thread.Sleep(1000);
+                    await Task.Delay(1000);
                 }
             }
         }
