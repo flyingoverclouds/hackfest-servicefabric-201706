@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace com.mega.contract
+namespace com.mega.contract.Result
 {
   public interface IResultService : IService
   {
