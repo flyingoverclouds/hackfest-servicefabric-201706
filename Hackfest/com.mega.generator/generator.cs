@@ -14,6 +14,8 @@ using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Client;
 using System.Linq;
 using com.mega.contract.result;
+using Microsoft.ServiceFabric.Services.Remoting.Client;
+using com.mega.contract.Result;
 
 namespace com.mega.generator
 {
@@ -52,10 +54,17 @@ namespace com.mega.generator
 
                 if (message != null)
                 {
-                    var response = await RunSproAsync(message.SessionType, message.UserName);
+                    // HACK : REPLACER BY FAKE MESSAGE
+                    
+                    //var response = await RunSproAsync(message.SessionType, message.UserName);
 
+                    string response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
                     var resultClient = ResultClient.Create();
-                    await resultClient.Set(message.MessageId, response).ConfigureAwait(false);
+
+                    string svcUrl = "fabric:/Hackfest/Result";
+                    var proxy = ServiceProxy.Create<IResultService>(new Uri(svcUrl), new ServicePartitionKey());
+
+                    await proxy.Set(message.MessageId, response).ConfigureAwait(false);
                 }
                 else
                 {

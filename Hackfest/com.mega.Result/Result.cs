@@ -8,6 +8,7 @@ using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using com.mega.contract.Result;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 
 namespace com.mega.Result
 {
@@ -57,7 +58,11 @@ namespace com.mega.Result
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new ServiceReplicaListener[0];
+            var listeners = new ServiceReplicaListener[1]
+           {
+                new ServiceReplicaListener( (context) => this.CreateServiceRemotingListener(context), "ServiceEndpoint")
+           };
+            return listeners;
         }
 
         /// <summary>
@@ -71,23 +76,23 @@ namespace com.mega.Result
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                using (var tx = this.StateManager.CreateTransaction())
-                {
+                //using (var tx = this.StateManager.CreateTransaction())
+                //{
 
-                    var dictEnumerable = await resultDictionary.CreateEnumerableAsync(tx);
-                    var dictEnumerator = dictEnumerable.GetAsyncEnumerator();
-                    while (await dictEnumerator.MoveNextAsync(cancellationToken))
-                    {
-                        var value = dictEnumerator.Current;
-                        if (DateTime.UtcNow - value.Value.CreatedDateTime >= TimeSpan.FromMinutes(5))
-                        {
-                            await resultDictionary.TryRemoveAsync(tx, value.Key);
-                        }
-                    }
-                    await tx.CommitAsync();
-                }
+                //    var dictEnumerable = await resultDictionary.CreateEnumerableAsync(tx);
+                //    var dictEnumerator = dictEnumerable.GetAsyncEnumerator();
+                //    while (await dictEnumerator.MoveNextAsync(cancellationToken))
+                //    {
+                //        var value = dictEnumerator.Current;
+                //        if (DateTime.UtcNow - value.Value.CreatedDateTime >= TimeSpan.FromMinutes(5))
+                //        {
+                //            await resultDictionary.TryRemoveAsync(tx, value.Key);
+                //        }
+                //    }
+                //    await tx.CommitAsync();
+                //}
 
-                await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
         }
     }
