@@ -14,7 +14,7 @@ namespace com.mega.sproexe
     static void Main(string[] args)
     {
       int port;
-      if (!int.TryParse(Environment.GetEnvironmentVariable("endpoint_port"), out port))
+      if (!int.TryParse(Environment.GetEnvironmentVariable("Fabric_Endpoint_com.mega.SproGuestExeTypeEndpoint"), out port))
       {
         if (port == 0) port = 50051;
       }
@@ -51,7 +51,7 @@ namespace com.mega.sproexe
     {
       _initTimeout.Elapsed += (object sender, ElapsedEventArgs e) =>
       {
-        EmptiedSpro.Invoke(this, null);
+        //EmptiedSpro.Invoke(this, null);
       };
       _initTimeout.Start();
     }
@@ -74,7 +74,7 @@ namespace com.mega.sproexe
             userTimer.Start();
             userTimer.Elapsed += (object sender, ElapsedEventArgs e) =>
             {
-              RemoveUser(request.Username);
+              //RemoveUser(request.Username);
             };
 
             _initTimeout.Stop();
@@ -135,7 +135,7 @@ namespace com.mega.sproexe
         {
           if (_usersInSession.Count == 0)
           {
-            EmptiedSpro.Invoke(this, null);
+            //EmptiedSpro.Invoke(this, null);
           }
         }
         Console.WriteLine($"SPRO Removing user {userName} GRANTED");

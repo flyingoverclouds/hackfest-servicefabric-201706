@@ -27,12 +27,17 @@
     <None Include="Scripts\Deploy-FabricApplication.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\com.mega.sproexe\bin\Debug\**\*.*">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Content>
     <Content Include="..\com.mega.spro\**\*.*">
       <Link>ApplicationPackageRoot\com.mega.sprowrapperPkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>
     <Content Include="..\spro\**\*.*">
       <Link>ApplicationPackageRoot\com.mega.sproexePkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>
+    <Content Include="ApplicationPackageRoot\com.mega.SproGuestExePkg\Config\Settings.xml" />
+    <Content Include="ApplicationPackageRoot\com.mega.SproGuestExePkg\ServiceManifest.xml" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
