@@ -50,26 +50,34 @@ namespace com.mega.generator
         {
             while (true)
             {
-                var queueClient = QueueClient.Create(_queueName);
-                var message = await queueClient.GetMessageAsync();
-
-                if (message != null)
+                try
                 {
-                    // HACK : REPLACER BY FAKE MESSAGE
-                    
-                    //var response = await RunSproAsync(message.SessionType, message.UserName);
+                    var queueClient = QueueClient.Create(_queueName);
+                    var message = await queueClient.GetMessageAsync();
 
-                    string response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
-                    var resultClient = ResultClient.Create();
+                    if (message != null)
+                    {
+                        string response;
 
-                    string svcUrl = "fabric:/Hackfest/Result";
-                    var proxy = ServiceProxy.Create<IResultService>(new Uri(svcUrl), new ServicePartitionKey());
+                        //response = await RunSproAsync(message.SessionType, message.UserName);
 
-                    await proxy.Set(message.MessageId, response).ConfigureAwait(false);
+                        response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
+                        var resultClient = ResultClient.Create();
+
+                        string svcUrl = "fabric:/Hackfest/Result";
+                        var proxy = ServiceProxy.Create<IResultService>(new Uri(svcUrl), new ServicePartitionKey());
+
+                        await proxy.Set(message.MessageId, response).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await Task.Delay(1000);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    await Task.Delay(1000);
+                    ServiceEventSource.Current.ServiceMessage(this.Context, "EXCEPTION : " + ex.ToString());
+                    await Task.Delay(250);
                 }
             }
         }
@@ -79,6 +87,7 @@ namespace com.mega.generator
             try
             {
                 var spro = await GetOrCreateSproAsync(sessionType, username);
+                return "";
 
                 var fabricClient = new FabricClient();
                 var healthState = HealthState.Unknown;

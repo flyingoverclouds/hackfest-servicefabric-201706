@@ -27,8 +27,50 @@
     <None Include="Scripts\Deploy-FabricApplication.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\com.mega.sproexe\bin\Debug\**\*.*">
-      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <Content Include="..\com.mega.sproexe\bin\Debug\com.mega.sproexe.exe">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\com.mega.sproexe.exe</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\com.mega.sproexe.exe.config">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\com.mega.sproexe.exe.config</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\com.mega.sproexe.pdb">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\com.mega.sproexe.pdb</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\Google.Protobuf.dll">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\Google.Protobuf.dll</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\Google.Protobuf.xml">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\Google.Protobuf.xml</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\Grpc.Core.dll">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\Grpc.Core.dll</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\Grpc.Core.xml">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\Grpc.Core.xml</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\grpc_csharp_ext.x64.dll">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\grpc_csharp_ext.x64.dll</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\grpc_csharp_ext.x86.dll">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\grpc_csharp_ext.x86.dll</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\libgrpc_csharp_ext.x64.dylib">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\libgrpc_csharp_ext.x64.dylib</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\libgrpc_csharp_ext.x64.so">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\libgrpc_csharp_ext.x64.so</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\libgrpc_csharp_ext.x86.dylib">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\libgrpc_csharp_ext.x86.dylib</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\libgrpc_csharp_ext.x86.so">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\libgrpc_csharp_ext.x86.so</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\System.Interactive.Async.dll">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\System.Interactive.Async.dll</Link>
+    </Content>
+    <Content Include="..\com.mega.sproexe\bin\Debug\System.Interactive.Async.xml">
+      <Link>ApplicationPackageRoot\com.mega.SproGuestExePkg\Code\System.Interactive.Async.xml</Link>
     </Content>
     <Content Include="..\com.mega.spro\**\*.*">
       <Link>ApplicationPackageRoot\com.mega.sprowrapperPkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>

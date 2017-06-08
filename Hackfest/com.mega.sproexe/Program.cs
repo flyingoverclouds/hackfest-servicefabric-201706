@@ -4,49 +4,71 @@ using Grpc.Core;
 using Mega;
 using System.Collections.Concurrent;
 using System.Timers;
+using System.IO;
+using System.Collections;
 
 namespace com.mega.sproexe
 {
-
-    class Program
+        class Program
     {
+        static StreamWriter debugOutput;
         static void Main(string[] args)
         {
-            uint port;
-            if (!uint.TryParse(Environment.GetEnvironmentVariable("Fabric_Endpoint_com.mega.SproGuestExeTypeEndpoint"), out port))
+            debugOutput = File.CreateText($"debug-{DateTime.UtcNow.Ticks}.txt");
+            try
             {
-                var nativeSessionImpl = new NativeSessionImpl();
-                Server server = new Server
+                debugOutput.WriteLine("------------------- FABRIC* ENV VARIABLE ");
+                foreach (DictionaryEntry ev in Environment.GetEnvironmentVariables())
                 {
-                    Services = { NativeSession.BindService(nativeSessionImpl) },
-                    Ports = { new ServerPort("localhost", (int)port, ServerCredentials.Insecure) }
-                };
-                server.Start();
-
-                /*
-                nativeSessionImpl.EmptiedSpro += (object sender, EventArgs e) =>
+                    if (ev.Key.ToString().ToLower().StartsWith("fabric"))
+                        debugOutput.WriteLine($"{ev.Key} = {ev.Value}"); debugOutput.Flush();
+                }
+                debugOutput.WriteLine("\r\n\r\n------------------ MAIN ");debugOutput.Flush();
+                uint port = Convert.ToUInt32(Environment.GetEnvironmentVariable("Fabric_Endpoint_com.mega.SproGuestExeTypeEndpoint"));
+                debugOutput.WriteLine($"port to use = {port}"); debugOutput.Flush();
+                if (port>0)
                 {
-                    Console.WriteLine("SPRO is empty, initiating shutdown");
-                    server.ShutdownAsync().ContinueWith(t =>
-                      {
-                          Console.WriteLine("Shutdown complete");
-                          Environment.Exit(0);
-                      });
-                };
-                */
+                    debugOutput.WriteLine($"SetviceFabric proposed port = {port}"); debugOutput.Flush();
+                    var nativeSessionImpl = new NativeSessionImpl();
+                    Server server = new Server
+                    {
+                        Services = { NativeSession.BindService(nativeSessionImpl) },
+                        Ports = { new ServerPort("localhost", (int)port, ServerCredentials.Insecure) }
+                    };
+                    server.Start();
+                    debugOutput.WriteLine($"Server is listening ..."); debugOutput.Flush();
+                    /*
+                    nativeSessionImpl.EmptiedSpro += (object sender, EventArgs e) =>
+                    {
+                        Console.WriteLine("SPRO is empty, initiating shutdown");
+                        server.ShutdownAsync().ContinueWith(t =>
+                          {
+                              Console.WriteLine("Shutdown complete");
+                              Environment.Exit(0);
+                          });
+                    };
+                    */
 
-                Console.WriteLine("SPRO NativeSession server listening on port " + port);
-                Console.WriteLine("Press any key to stop the server...");
-                Console.ReadKey();
-                server.ShutdownAsync().Wait();
+                    Console.WriteLine("SPRO NativeSession server listening on port " + port);
+                    Console.WriteLine("Press any key to stop the server...");
+                    Console.ReadKey();
+                    server.ShutdownAsync().Wait();
+                }
+                else
+                {
+                    debugOutput.WriteLine($" NO PORT AVAILABLE "); debugOutput.Flush();
+                    Console.WriteLine("SPRO NativeSession server has not been instatiated because no port has been set");
+                    Console.WriteLine("Press any key to stop the server...");
+                    Console.ReadKey();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                Console.WriteLine("SPRO NativeSession server has not been instatiated because no port has been set");
-                Console.WriteLine("Press any key to stop the server...");
-                Console.ReadKey();
+
             }
+           
         }
+            
     }
 
     class NativeSessionImpl : NativeSession.NativeSessionBase

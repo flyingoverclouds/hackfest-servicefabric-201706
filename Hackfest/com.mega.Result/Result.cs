@@ -9,6 +9,7 @@ using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using com.mega.contract.Result;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
+using System.Runtime.Serialization;
 
 namespace com.mega.Result
 {
@@ -72,7 +73,7 @@ namespace com.mega.Result
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            var resultDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, TimestampedValue>>("results");
+            //var resultDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, TimestampedValue>>("results");
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -97,7 +98,8 @@ namespace com.mega.Result
         }
     }
 
-    class TimestampedValue
+
+    public class TimestampedValue
     {
         public string Value { get; set; }
         public DateTime CreatedDateTime { get; set; }
