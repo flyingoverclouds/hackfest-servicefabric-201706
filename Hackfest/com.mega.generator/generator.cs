@@ -66,23 +66,49 @@ namespace com.mega.generator
 
         private async Task<string> RunSproAsync(string sessionType, string username)
         {
-            var spro = await GetOrCreateSproAsync(sessionType, username);
-
-            var channel = new Channel(spro.Ip, spro.Port, ChannelCredentials.Insecure);
-            var client = new NativeSession.NativeSessionClient(channel);
-
-            var request = new GenerateRequest
+            try
             {
-                Username = "admin",
-                Type = "BPMN",
-                Payload = DateTime.Now.Ticks.ToString()
-            };
+                var spro = await GetOrCreateSproAsync(sessionType, username);
 
-            var generateReply = await client.GenerateAsync(request, new CallOptions());
+                var fabricClient = new FabricClient();
+                var serviceStatus = System.Fabric.Query.ServiceStatus.Unknown;
 
-            await channel.ShutdownAsync();
+                /*
+                var count = 0;
+                while (serviceStatus != System.Fabric.Query.ServiceStatus.Active) 
+                {
+                    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
+                    serviceStatus = serviceList.Single(s => s.ServiceName == spro.ServiceName).ServiceStatus;
 
-            return generateReply.Response;
+                    if (serviceStatus == System.Fabric.Query.ServiceStatus.)
+                    {
+                        break;
+                    } else
+                    {
+
+                    }
+
+                }*/
+
+                var channel = new Channel(spro.Ip, spro.Port, ChannelCredentials.Insecure);
+                var client = new NativeSession.NativeSessionClient(channel);
+
+                var request = new GenerateRequest
+                {
+                    Username = "admin",
+                    Type = "BPMN",
+                    Payload = DateTime.Now.Ticks.ToString()
+                };
+
+                var generateReply = await client.GenerateAsync(request, new CallOptions());
+
+                await channel.ShutdownAsync();
+
+                return generateReply.Response;
+            } catch (Exception e)
+            {
+                throw;
+            }
         }
 
         private async Task<SprocAddressStruct> GetOrCreateSproAsync(string messageSessionType, string messageUserName)
@@ -104,7 +130,6 @@ namespace com.mega.generator
             }
             if (service == null)
             {
-
                 StatelessServiceDescription newGeneratorDescription = new StatelessServiceDescription()
                 {
                     ApplicationName = new Uri(this.Context.CodePackageActivationContext.ApplicationName),
@@ -133,8 +158,7 @@ namespace com.mega.generator
 
             var parts = fqdn.Split(':');
 
-            
-            return new SprocAddressStruct { Ip = parts[0], Port = Convert.ToInt32(parts[1]) };
+            return new SprocAddressStruct { ServiceName = service.ServiceName, Ip = parts[0], Port = Convert.ToInt32(parts[1]) };
         }
     }
 }
