@@ -59,7 +59,7 @@ namespace com.mega.generator
                     {
                         string response;
 
-                        //response = await RunSproAsync(message.SessionType, message.UserName);
+                        response = await RunSproAsync(message.SessionType, message.UserName);
 
                         response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
                         var resultClient = ResultClient.Create();
@@ -86,9 +86,9 @@ namespace com.mega.generator
         {
             try
             {
-                var spro = await GetOrCreateSproAsync(sessionType, username);
-                return "";
+                var spro = await GetOrCreateSproServiceInstanceAsync(sessionType, username);
 
+                return "";
                 var fabricClient = new FabricClient();
                 var healthState = HealthState.Unknown;
 
@@ -127,7 +127,7 @@ namespace com.mega.generator
             }
         }
 
-        private async Task<SprocAddressStruct> GetOrCreateSproAsync(string messageSessionType, string messageUserName)
+        private async Task<SprocAddressStruct> GetOrCreateSproServiceInstanceAsync(string messageSessionType, string messageUserName)
         {
             var urlPath = $"SPROC_{messageSessionType}_{messageUserName}";
 
@@ -141,8 +141,8 @@ namespace com.mega.generator
             }
             catch (Exception ex)
             {
+                // nothing to do -> exception mean no service with the requested namename
                 service = null;
-                // nothing -> exception mean no service with name
             }
             if (service == null)
             {
