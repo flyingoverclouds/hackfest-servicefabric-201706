@@ -14,34 +14,41 @@ namespace com.mega.sproexe
     static void Main(string[] args)
     {
       int port;
-      if (!int.TryParse(Environment.GetEnvironmentVariable("Fabric_Endpoint_com.mega.SproGuestExeTypeEndpoint"), out port))
-      {
-        if (port == 0) port = 50051;
-      }
-     
-      var nativeSessionImpl = new NativeSessionImpl();
-      Server server = new Server
-      {
-        Services = { NativeSession.BindService(nativeSessionImpl) },
-        Ports = { new ServerPort("localhost", port, ServerCredentials.Insecure) }
-      };
-      server.Start();
+            if (!int.TryParse(Environment.GetEnvironmentVariable("Fabric_Endpoint_com.mega.SproGuestExeTypeEndpoint"), out port))
+            {
+                if (port != 0)
+                {
 
-      nativeSessionImpl.EmptiedSpro += (object sender, EventArgs e) =>
-      {
-        Console.WriteLine("SPRO is empty, initiating shutdown");
-        server.ShutdownAsync().ContinueWith(t =>
-        {
-          Console.WriteLine("Shutdown complete");
-          Environment.Exit(0);
-        });
-      };
+                    var nativeSessionImpl = new NativeSessionImpl();
+                    Server server = new Server
+                    {
+                        Services = { NativeSession.BindService(nativeSessionImpl) },
+                        Ports = { new ServerPort("localhost", port, ServerCredentials.Insecure) }
+                    };
+                    server.Start();
 
-      Console.WriteLine("SPRO NativeSession server listening on port " + port);
-      Console.WriteLine("Press any key to stop the server...");
-      Console.ReadKey();
+                    nativeSessionImpl.EmptiedSpro += (object sender, EventArgs e) =>
+                    {
+                        Console.WriteLine("SPRO is empty, initiating shutdown");
+                        server.ShutdownAsync().ContinueWith(t =>
+                          {
+                              Console.WriteLine("Shutdown complete");
+                              Environment.Exit(0);
+                          });
+                    };
 
-      server.ShutdownAsync().Wait();
+                    Console.WriteLine("SPRO NativeSession server listening on port " + port);
+                    Console.WriteLine("Press any key to stop the server...");
+                    Console.ReadKey();
+                    server.ShutdownAsync().Wait();
+                }
+            }
+            else
+            {
+                Console.WriteLine("SPRO NativeSession server has not been instatiated because no port has been set");
+                Console.WriteLine("Press any key to stop the server...");
+                Console.ReadKey();
+            }
     }
   }
 
