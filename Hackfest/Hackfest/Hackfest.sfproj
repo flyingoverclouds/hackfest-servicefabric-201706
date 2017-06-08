@@ -36,6 +36,7 @@
     <Content Include="..\spro\**\*.*">
       <Link>ApplicationPackageRoot\com.mega.sproexePkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>
+    <Content Include="app.config" />
     <Content Include="ApplicationPackageRoot\com.mega.SproGuestExePkg\Config\Settings.xml" />
     <Content Include="ApplicationPackageRoot\com.mega.SproGuestExePkg\ServiceManifest.xml" />
     <Content Include="packages.config" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <ProjectReference Include="..\com.mega.generator\com.mega.generator.csproj" />
     <ProjectReference Include="..\com.mega.QueueService\com.mega.QueueService.csproj" />
+    <ProjectReference Include="..\com.mega.Result\com.mega.Result.csproj" />
     <ProjectReference Include="..\com.mega.webfront\com.mega.webfront.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
