@@ -69,17 +69,14 @@ namespace com.mega.Result
         {
             var resultDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, TimestampedValue>>("results");
 
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 using (var tx = this.StateManager.CreateTransaction())
                 {
 
                     var dictEnumerable = await resultDictionary.CreateEnumerableAsync(tx);
                     var dictEnumerator = dictEnumerable.GetAsyncEnumerator();
-                    CancellationToken dictToken;
-                    while (await dictEnumerator.MoveNextAsync(dictToken))
+                    while (await dictEnumerator.MoveNextAsync(cancellationToken))
                     {
                         var value = dictEnumerator.Current;
                         if (DateTime.UtcNow - value.Value.CreatedDateTime >= TimeSpan.FromMinutes(5))
@@ -93,7 +90,6 @@ namespace com.mega.Result
                 await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
             }
         }
-
     }
 
     class TimestampedValue
