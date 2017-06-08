@@ -13,6 +13,7 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Client;
 using System.Linq;
+using com.mega.contract.result;
 
 namespace com.mega.generator
 {
@@ -52,11 +53,9 @@ namespace com.mega.generator
                 if (message != null)
                 {
                     var response = await RunSproAsync(message.SessionType, message.UserName);
-                    var responseMessage = new QueueMessage("sessionType", "userName");
 
-                    var answerQueue = QueueClient.Create("AnswerQueue");
-
-                    await answerQueue.PushAsync(responseMessage).ConfigureAwait(false);
+                    var resultClient = ResultClient.Create();
+                    await resultClient.Set(message.MessageId, response).ConfigureAwait(false);
                 }
                 else
                 {

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
-using System.Fabric.Query;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using com.mega.queuecontract;
 using System.Net;
