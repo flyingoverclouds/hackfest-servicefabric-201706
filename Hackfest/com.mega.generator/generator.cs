@@ -61,7 +61,7 @@ namespace com.mega.generator
 
                         response = await RunSproAsync(message.SessionType, message.UserName);
 
-                        response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
+                        //response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
                         var resultClient = ResultClient.Create();
 
                         string svcUrl = "fabric:/Hackfest/Result";
@@ -88,31 +88,32 @@ namespace com.mega.generator
             {
                 var spro = await GetOrCreateSproServiceInstanceAsync(sessionType, username);
 
-                return "";
+
                 var fabricClient = new FabricClient();
                 var healthState = HealthState.Unknown;
 
-                var count = 0;
-                while (healthState != HealthState.Ok) 
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(5));
+                //var count = 0;
 
-                    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
-                    healthState = serviceList.Single(s => s.ServiceName == spro.ServiceName).HealthState;
-
-                    if (count++ >= 10)
-                    {
-                        throw new TimeoutException("Time out waiting for " + spro.ServiceName.AbsolutePath);
-                    }
-                }
+                //while (healthState != HealthState.Ok) 
+                //{
+                //    // HACK : beurk :(
+                //    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
+                //    healthState = serviceList.Single(s => s.ServiceName == spro.ServiceName).HealthState;
+                //    if (healthState!=HealthState.Ok)
+                //        await Task.Delay(TimeSpan.FromSeconds(2));
+                //    if (count++ >= 10)
+                //    {
+                //        throw new TimeoutException("Time out waiting for " + spro.ServiceName.AbsolutePath);
+                //    }
+                //}
 
                 var channel = new Channel(spro.Ip, spro.Port, ChannelCredentials.Insecure);
                 var client = new NativeSession.NativeSessionClient(channel);
 
                 var request = new GenerateRequest
                 {
-                    Username = "admin",
-                    Type = "BPMN",
+                    Username = username,
+                    Type = sessionType,
                     Payload = DateTime.Now.Ticks.ToString()
                 };
 

@@ -124,6 +124,9 @@ namespace com.mega.sproexe
                 userTimer.Start();
                 Console.WriteLine($"SPRO Generate for {request.Username} / {request.Type} GRANTED");
             }
+            // HACK TEST CALL NICLERC
+            // TODO : correct code 
+            response = $"req=({request.Username},{request.Type}) tick={DateTime.UtcNow.Ticks}";
             return Task.FromResult(new GenerateReply { Response = response });
         }
 
