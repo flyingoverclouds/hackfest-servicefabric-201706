@@ -117,6 +117,7 @@ namespace com.mega.QueueService
         public async Task<Tuple<HttpStatusCode, QueueMessage>> PushAsync(QueueMessage message)
         {
             message.CreatedDateTime = DateTime.UtcNow;
+            message.MessageId = Guid.NewGuid();
             long count = -1;
             try
             {

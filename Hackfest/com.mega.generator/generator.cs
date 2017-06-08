@@ -33,9 +33,11 @@ namespace com.mega.generator
             : base(context)
         {
             _queueName = System.Text.Encoding.Default.GetString(context.InitializationData);
-            if (string.IsNullOrEmpty(_queueName)) // HACK for dev environment (defaultServices instanciation)
+            if (string.IsNullOrEmpty(_queueName))
+            {
+                // HACK for dev environment (defaultServices instanciation)
                 _queueName = "RequestQueue";
-
+            }
         }
 
         protected override async Task RunAsync(CancellationToken cancellationToken)
@@ -47,7 +49,7 @@ namespace com.mega.generator
 
                 if (message != null)
                 {
-                    var response = await GetOrCreateSproExeAsync(message.SessionType, message.UserName);
+                    var response = await RunSproAsync(message.SessionType, message.UserName);
                     var responseMessage = new QueueMessage("sessionType", "userName");
 
                     var answerQueue = QueueClient.Create("AnswerQueue");
@@ -61,14 +63,12 @@ namespace com.mega.generator
             }
         }
 
-        private async Task<string> GetOrCreateSproExeAsync(string sessionType, string username)
+        private async Task<string> RunSproAsync(string sessionType, string username)
         {
-            var sprocInstance = await GetSprocInstanceAsync(sessionType, username);
+            var spro = await GetOrCreateSproAsync(sessionType, username);
 
-            var channel = new Channel(sprocInstance.Ip, sprocInstance.Port, ChannelCredentials.Insecure);
-
-            var client =
-                new NativeSession.NativeSessionClient(channel);
+            var channel = new Channel(spro.Ip, spro.Port, ChannelCredentials.Insecure);
+            var client = new NativeSession.NativeSessionClient(channel);
 
             var request = new GenerateRequest
             {
@@ -77,17 +77,14 @@ namespace com.mega.generator
                 Payload = DateTime.Now.Ticks.ToString()
             };
 
-
             var generateReply = await client.GenerateAsync(request, new CallOptions());
 
-            var response = generateReply.Response;
+            await channel.ShutdownAsync();
 
-            channel.ShutdownAsync().Wait();
-
-            return response;
+            return generateReply.Response;
         }
 
-        private async Task<SprocAddressStruct> GetSprocInstanceAsync(string messageSessionType, string messageUserName)
+        private async Task<SprocAddressStruct> GetOrCreateSproAsync(string messageSessionType, string messageUserName)
         {
             var urlPath = $"SPROC_{messageSessionType}_{messageUserName}";
 

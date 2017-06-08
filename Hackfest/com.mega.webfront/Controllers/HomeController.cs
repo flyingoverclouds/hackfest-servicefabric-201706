@@ -23,7 +23,7 @@ namespace com.mega.webfront.Controllers
             var message = new QueueMessage(sessionType, username);
 
             var response = await queueClient.PushAsync(message);
-            ViewData["FormData"] = response.Item2;
+            ViewData["FormData"] = response.Item2.MessageId;
             return View();
         }
 
