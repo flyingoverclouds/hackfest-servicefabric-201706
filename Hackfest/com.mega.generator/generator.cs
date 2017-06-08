@@ -14,6 +14,7 @@ using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Client;
 using System.Linq;
 using com.mega.contract.result;
+using System.Fabric.Health;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
 using com.mega.contract.Result;
 
@@ -80,24 +81,21 @@ namespace com.mega.generator
                 var spro = await GetOrCreateSproAsync(sessionType, username);
 
                 var fabricClient = new FabricClient();
-                var serviceStatus = System.Fabric.Query.ServiceStatus.Unknown;
+                var healthState = HealthState.Unknown;
 
-                /*
                 var count = 0;
-                while (serviceStatus != System.Fabric.Query.ServiceStatus.Active) 
+                while (healthState != HealthState.Ok) 
                 {
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+
                     var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
-                    serviceStatus = serviceList.Single(s => s.ServiceName == spro.ServiceName).ServiceStatus;
+                    healthState = serviceList.Single(s => s.ServiceName == spro.ServiceName).HealthState;
 
-                    if (serviceStatus == System.Fabric.Query.ServiceStatus.)
+                    if (count++ >= 10)
                     {
-                        break;
-                    } else
-                    {
-
+                        throw new TimeoutException("Time out waiting for " + spro.ServiceName.AbsolutePath);
                     }
-
-                }*/
+                }
 
                 var channel = new Channel(spro.Ip, spro.Port, ChannelCredentials.Insecure);
                 var client = new NativeSession.NativeSessionClient(channel);
