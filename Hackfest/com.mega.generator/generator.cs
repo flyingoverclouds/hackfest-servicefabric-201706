@@ -15,6 +15,8 @@ using Microsoft.ServiceFabric.Services.Client;
 using System.Linq;
 using com.mega.contract.result;
 using System.Fabric.Health;
+using Microsoft.ServiceFabric.Services.Remoting.Client;
+using com.mega.contract.Result;
 
 namespace com.mega.generator
 {
@@ -48,19 +50,34 @@ namespace com.mega.generator
         {
             while (true)
             {
-                var queueClient = QueueClient.Create(_queueName);
-                var message = await queueClient.GetMessageAsync();
-
-                if (message != null)
+                try
                 {
-                    var response = await RunSproAsync(message.SessionType, message.UserName);
+                    var queueClient = QueueClient.Create(_queueName);
+                    var message = await queueClient.GetMessageAsync();
 
-                    var resultClient = ResultClient.Create();
-                    await resultClient.Set(message.MessageId, response).ConfigureAwait(false);
+                    if (message != null)
+                    {
+                        string response;
+
+                        response = await RunSproAsync(message.SessionType, message.UserName);
+
+                        //response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
+                        var resultClient = ResultClient.Create();
+
+                        string svcUrl = "fabric:/Hackfest/Result";
+                        var proxy = ServiceProxy.Create<IResultService>(new Uri(svcUrl), new ServicePartitionKey());
+
+                        await proxy.Set(message.MessageId, response).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await Task.Delay(1000);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    await Task.Delay(1000);
+                    ServiceEventSource.Current.ServiceMessage(this.Context, "EXCEPTION : " + ex.ToString());
+                    await Task.Delay(250);
                 }
             }
         }
@@ -69,32 +86,34 @@ namespace com.mega.generator
         {
             try
             {
-                var spro = await GetOrCreateSproAsync(sessionType, username);
+                var spro = await GetOrCreateSproServiceInstanceAsync(sessionType, username);
+
 
                 var fabricClient = new FabricClient();
                 var healthState = HealthState.Unknown;
 
-                var count = 0;
-                while (healthState != HealthState.Ok) 
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(5));
+                //var count = 0;
 
-                    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
-                    healthState = serviceList.Single(s => s.ServiceName == spro.ServiceName).HealthState;
-
-                    if (count++ >= 10)
-                    {
-                        throw new TimeoutException("Time out waiting for " + spro.ServiceName.AbsolutePath);
-                    }
-                }
+                //while (healthState != HealthState.Ok) 
+                //{
+                //    // HACK : beurk :(
+                //    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
+                //    healthState = serviceList.Single(s => s.ServiceName == spro.ServiceName).HealthState;
+                //    if (healthState!=HealthState.Ok)
+                //        await Task.Delay(TimeSpan.FromSeconds(2));
+                //    if (count++ >= 10)
+                //    {
+                //        throw new TimeoutException("Time out waiting for " + spro.ServiceName.AbsolutePath);
+                //    }
+                //}
 
                 var channel = new Channel(spro.Ip, spro.Port, ChannelCredentials.Insecure);
                 var client = new NativeSession.NativeSessionClient(channel);
 
                 var request = new GenerateRequest
                 {
-                    Username = "admin",
-                    Type = "BPMN",
+                    Username = username,
+                    Type = sessionType,
                     Payload = DateTime.Now.Ticks.ToString()
                 };
 
@@ -109,7 +128,7 @@ namespace com.mega.generator
             }
         }
 
-        private async Task<SprocAddressStruct> GetOrCreateSproAsync(string messageSessionType, string messageUserName)
+        private async Task<SprocAddressStruct> GetOrCreateSproServiceInstanceAsync(string messageSessionType, string messageUserName)
         {
             var urlPath = $"SPROC_{messageSessionType}_{messageUserName}";
 
@@ -123,8 +142,8 @@ namespace com.mega.generator
             }
             catch (Exception ex)
             {
+                // nothing to do -> exception mean no service with the requested namename
                 service = null;
-                // nothing -> exception mean no service with name
             }
             if (service == null)
             {

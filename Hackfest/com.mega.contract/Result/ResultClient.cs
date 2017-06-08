@@ -7,7 +7,7 @@ namespace com.mega.contract.result
 {
     public class ResultClient
     {
-        private const string svcUrl = "fabric:/Hackfest/ResultService";
+        private const string svcUrl = "fabric:/Hackfest/Result";
 
         public static IResultService Create()
         {
