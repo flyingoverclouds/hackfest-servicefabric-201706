@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace com.mega.QueueService
 {
-
     /// <summary>
     ///  THis class implement a basinc scaling feature.
     /// </summary>
