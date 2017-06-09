@@ -12,12 +12,12 @@ var openSocket = function () {
 
         socket.onmessage = function (data) {
             console.log(data);
-            $("#responseText").text(data.data)
-        }
+            $("#responseText").text(data.data);
+        };
 
         socket.onopen = function () {
             socket.send(responseId);
-        }
+        };
     }
 };
 

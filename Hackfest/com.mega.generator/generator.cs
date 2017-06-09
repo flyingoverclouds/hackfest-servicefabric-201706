@@ -86,23 +86,6 @@ namespace com.mega.generator
 
 
                 var fabricClient = new FabricClient();
-                var healthState = HealthState.Unknown;
-
-                //var count = 0;
-
-                //while (healthState != HealthState.Ok) 
-                //{
-                //    // HACK : beurk :( dont check service health on each call : check it only after creation 
-                //    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
-                //    healthState = serviceList.Single(s => s.ServiceName == spro.ServiceName).HealthState;
-                //    if (healthState!=HealthState.Ok)
-                //        await Task.Delay(TimeSpan.FromSeconds(2));
-                //    if (count++ >= 10)
-                //    {
-                //        throw new TimeoutException("Time out waiting for " + spro.ServiceName.AbsolutePath);
-                //    }
-                //}
-
                 var channel = new Channel(spro.Ip, spro.Port, ChannelCredentials.Insecure);
                 var client = new NativeSession.NativeSessionClient(channel);
 
@@ -147,7 +130,7 @@ namespace com.mega.generator
                 {
                     ApplicationName = new Uri(this.Context.CodePackageActivationContext.ApplicationName),
                     ServiceName = url,
-                    InstanceCount=1,
+                    InstanceCount = 1,
                     ServiceTypeName = "com.mega.SproGuestExeType",
                     PartitionSchemeDescription = new SingletonPartitionSchemeDescription()
                 };
@@ -155,8 +138,27 @@ namespace com.mega.generator
                 await fabricClient.ServiceManager.CreateServiceAsync(newGeneratorDescription).ConfigureAwait(false);
 
                 service = await fabricClient.ServiceManager.GetServiceDescriptionAsync(url);
+
+
+                var healthState = HealthState.Unknown;
+                var count = 0;
+                while (healthState != HealthState.Ok)
+                {
+                    if (count++ >= 10)
+                    {
+                        throw new TimeoutException("Time out waiting for " + url);
+                    }
+
+                    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
+                    healthState = serviceList.Single(services => services.ServiceName == url).HealthState;
+
+                    if (healthState != HealthState.Ok)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(2));
+                    }
+                }
             }
-            
+
             ServicePartitionResolver resolver = ServicePartitionResolver.GetDefault();
             ResolvedServicePartition partition = await resolver.ResolveAsync(service.ServiceName,
                 new ServicePartitionKey(), CancellationToken.None);
@@ -165,7 +167,7 @@ namespace com.mega.generator
             // s.Address == {"Endpoints":{"com.mega.SproGuestExeTypeEndpoint":"localhost:33039"}}
 
             // HACK : exytraction fqdn : should using json deserialization instead of this bad hack
-            int start = s.Address.IndexOf(":\"")+2;
+            int start = s.Address.IndexOf(":\"") + 2;
             int stop = s.Address.IndexOf("\"", start);
             var fqdn = s.Address.Substring(start, stop - start);
 
