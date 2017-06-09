@@ -92,7 +92,7 @@ namespace com.mega.generator
 
                 //while (healthState != HealthState.Ok) 
                 //{
-                //    // HACK : beurk :(
+                //    // HACK : beurk :( dont check service health on each call : check it only after creation 
                 //    var serviceList = await fabricClient.QueryManager.GetServiceListAsync(new Uri(this.Context.CodePackageActivationContext.ApplicationName));
                 //    healthState = serviceList.Single(s => s.ServiceName == spro.ServiceName).HealthState;
                 //    if (healthState!=HealthState.Ok)
@@ -115,9 +115,9 @@ namespace com.mega.generator
 
                 var generateReply = await client.GenerateAsync(request, new CallOptions());
 
+                var response = generateReply.Response;
                 await channel.ShutdownAsync();
-
-                return generateReply.Response;
+                return response;
             } catch (Exception e)
             {
                 throw;

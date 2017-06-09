@@ -126,7 +126,10 @@ namespace com.mega.sproexe
             }
             // HACK TEST CALL NICLERC
             // TODO : correct code 
-            response = $"req=({request.Username},{request.Type}) tick={DateTime.UtcNow.Ticks}";
+            // generate a fake answer because of a bug in spro.exe
+            response = "{  \"id\":\"" + Guid.NewGuid().ToString() + "\", \"answer\": \"" +
+                $"Request for ({request.Username},{request.Type}) succedded at {DateTime.Now.ToLongTimeString()}"
+                + "\" }";
             return Task.FromResult(new GenerateReply { Response = response });
         }
 
