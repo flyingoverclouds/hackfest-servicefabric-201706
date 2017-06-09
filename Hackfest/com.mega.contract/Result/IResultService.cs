@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace com.mega.contract.Result
 {
-  public interface IResultService : IService
-  {
-    Task<string> Get(Guid key);
+    public interface IResultService : IService
+    {
+        Task<string> Get(Guid key);
 
-    Task Set(Guid key, string value);
-  }
+        Task Set(Guid key, string value);
+    }
 }

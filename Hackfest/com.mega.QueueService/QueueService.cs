@@ -84,7 +84,6 @@ namespace com.mega.QueueService
 
         public async Task<QueueMessage> GetMessageAsync()
         {
-            long count = -1;
             try
             {
                 var queue = await this.StateManager.GetOrAddAsync<IReliableQueue<QueueMessage>>(QueueName).ConfigureAwait(false);
@@ -93,7 +92,6 @@ namespace com.mega.QueueService
                     var msgCV = await queue.TryDequeueAsync(tx).ConfigureAwait(false) ;
                     if (msgCV.HasValue)
                     {
-                        count = await  queue.GetCountAsync(tx);
                         await tx.CommitAsync();
                         return msgCV.Value;
                     }
@@ -104,10 +102,6 @@ namespace com.mega.QueueService
             {
                 ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.GetMessageAsync() EXCEPTION : {ex}");
             }
-            finally
-            {
-                scaler?.UpdateMetric(count);
-            }
             return null;
         }
 
@@ -115,14 +109,12 @@ namespace com.mega.QueueService
         {
             message.CreatedDateTime = DateTime.UtcNow;
             message.MessageId = Guid.NewGuid();
-            long count = -1;
             try
             {
                 var queue = await this.StateManager.GetOrAddAsync<IReliableQueue<QueueMessage>>(QueueName).ConfigureAwait(false);
                 using (var tx = this.StateManager.CreateTransaction())
                 {
                     await queue.EnqueueAsync(tx, message);
-                    count = await queue.GetCountAsync(tx);
                     await tx.CommitAsync();
                 }
 
@@ -132,10 +124,6 @@ namespace com.mega.QueueService
             {
                 ServiceEventSource.Current.ServiceMessage(this.Context, $"QueueService.PushAsync() EXCEPTION : {ex}");
                 return Tuple.Create(HttpStatusCode.InternalServerError, message);
-            }
-            finally
-            {
-                scaler?.UpdateMetric(count);
             }
         }
     }

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using com.mega.contract.result;
+using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -14,8 +12,6 @@ namespace com.mega.webfront.Middleware
     public class WebSocketMiddleware
     {
         private readonly RequestDelegate _next;
-        private static ConcurrentDictionary<string, WebSocket> _sockets = new ConcurrentDictionary<string, WebSocket>();
-        private static ConcurrentDictionary<string, string> _requests = new ConcurrentDictionary<string, string>();
 
         public WebSocketMiddleware(RequestDelegate next)
         {
@@ -31,37 +27,20 @@ namespace com.mega.webfront.Middleware
             }
 
             CancellationToken ct = context.RequestAborted;
-            WebSocket currentSocket = await context.WebSockets.AcceptWebSocketAsync();
-            var socketId = Guid.NewGuid().ToString();
-
-            _sockets.TryAdd(socketId, currentSocket);
-
-            var resultId = await ReceiveStringAsync(currentSocket, ct);
-            _requests.TryAdd(socketId, resultId);
-
-            while (!ct.IsCancellationRequested)
+            using (WebSocket currentSocket = await context.WebSockets.AcceptWebSocketAsync())
             {
-                foreach (var socket in _sockets)
+                var resultId = await ReceiveStringAsync(currentSocket, ct);
+                var cnt = 0;
+                while (!ct.IsCancellationRequested && !currentSocket.CloseStatus.HasValue)
                 {
-                    if (socket.Value.State != WebSocketState.Open)
-                    {
-                        continue;
-                    }
-
-                    string result;
-                    _requests.TryGetValue(socket.Key, out result);
-
-                    await SendStringAsync(socket.Value, $"{result}", ct);
+                    var resultClient = ResultClient.Create();
+                    var actualResult = await resultClient.Get(new Guid(resultId));
+                    await SendStringAsync(currentSocket, $"{actualResult} {cnt++}", ct);
+                    await Task.Delay(1000);
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(1), ct);
+                await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
             }
-
-            WebSocket dummy;
-            _sockets.TryRemove(socketId, out dummy);
-
-            await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
-            currentSocket.Dispose();
         }
 
         private static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))

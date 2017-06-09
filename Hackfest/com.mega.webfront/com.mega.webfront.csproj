@@ -24,6 +24,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\com.mega.contract\com.mega.contract.csproj" />
     <ProjectReference Include="..\com.mega.queuecontract\com.mega.queuecontract.csproj" />
   </ItemGroup>
   <ItemGroup>
