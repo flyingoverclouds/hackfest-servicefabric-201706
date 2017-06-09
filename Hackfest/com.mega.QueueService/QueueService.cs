@@ -23,7 +23,6 @@ namespace com.mega.QueueService
             : base(context)
         { }
 
-
         /// <summary>
         /// Optional override to create listeners (e.g., HTTP, Service Remoting, WCF, etc.) for this service replica to handle client or user requests.
         /// </summary>

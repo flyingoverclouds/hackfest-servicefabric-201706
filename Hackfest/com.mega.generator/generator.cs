@@ -63,11 +63,7 @@ namespace com.mega.generator
 
                         //response = $"ANSWER FOR {message.MessageId} : {message.UserName}   {message.SessionType}";
                         var resultClient = ResultClient.Create();
-
-                        string svcUrl = "fabric:/Hackfest/Result";
-                        var proxy = ServiceProxy.Create<IResultService>(new Uri(svcUrl), new ServicePartitionKey());
-
-                        await proxy.Set(message.MessageId, response).ConfigureAwait(false);
+                        await resultClient.Set(message.MessageId, response).ConfigureAwait(false);
                     }
                     else
                     {
